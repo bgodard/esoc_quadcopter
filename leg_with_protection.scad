@@ -16,6 +16,6 @@ rotate([90,0,90]) leg_prop();
 translate([130,0,-50]) rotate([0,0,180]) guard();
 }
 //guard();
-//leg_prop();
+leg_prop();
 
-main();
+//main();
