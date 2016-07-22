@@ -124,7 +124,8 @@ propeller_guard();
 //leg_prop();//the output of this command should be reloaded in the meshmixer and used to regenerate "leg_combined.stl" 
 
 //final artifacts
-//import("stls/leg_combined.stl", convexity=3);
-rotate([90,0,0]) propeller_guard();
+
+import("stls/leg_combined.stl", convexity=3);
+//rotate([90,0,0]) propeller_guard();
 
 //guard2();
