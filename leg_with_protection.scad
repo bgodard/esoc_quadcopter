@@ -125,7 +125,7 @@ propeller_guard();
 
 //final artifacts
 
-import("stls/leg_combined.stl", convexity=3);
+rotate([0,180,0]) mirror([0,0,1]) import("stls/leg_combined.stl", convexity=3);
 //rotate([90,0,0]) propeller_guard();
 
 //guard2();
