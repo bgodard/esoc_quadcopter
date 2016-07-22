@@ -3,7 +3,7 @@ LEG_WIDTH=10.1;
 STRENGHTEN_LEG_LENGTH=120;
 STRENGHTEN_LEG_THICK=4;
 START_X_LEG=16;
-LEG_DIAMETER=17.5;
+LEG_DIAMETER=18.5;
 CONNECTOR_WIDTH=5;
 CONNECTOR1_LENGTH=45;
 CONNECTOR1_X=10;
@@ -22,6 +22,7 @@ NUT_HEIGHT_M3=2.5;
 GUARD_Y_POS=-31.5;
 GUARD_HEIGHT1=30;
 GUARD_LENGTH=30;
+GUARD_WIDTH=LEG_WIDTH*2+5;
 module connectors(less)
 {
     //CONNECTION SLOT
@@ -36,6 +37,8 @@ module leg_prop()
     //LEG EXTENSION
     translate([START_X_LEG-STRENGHTEN_LEG_THICK/2,-16+STRENGHTEN_LEG_LENGTH/2,0]) cube([STRENGHTEN_LEG_THICK,STRENGHTEN_LEG_LENGTH,LEG_WIDTH],center=true);
     translate([START_X_LEG+LEG_DIAMETER+STRENGHTEN_LEG_THICK/2,-16+STRENGHTEN_LEG_LENGTH/2,0]) cube([STRENGHTEN_LEG_THICK,STRENGHTEN_LEG_LENGTH,LEG_WIDTH],center=true);
+    STRENGHTEN_LEG_LENGTH_EXTRA=40;
+    translate([START_X_LEG+LEG_DIAMETER+STRENGHTEN_LEG_THICK/2,-52+STRENGHTEN_LEG_LENGTH_EXTRA/2,0]) cube([STRENGHTEN_LEG_THICK,STRENGHTEN_LEG_LENGTH_EXTRA,LEG_WIDTH],center=true);
     difference()
     {
     translate([START_X_LEG+LEG_DIAMETER/2,-16+STRENGHTEN_LEG_LENGTH,0])  cylinder(h=LEG_WIDTH,r=LEG_DIAMETER/2+STRENGHTEN_LEG_THICK,center=true);
@@ -66,21 +69,30 @@ module guardhole()
 module guard2()
 {
     difference(){
-    translate([-14,GUARD_Y_POS,0]) cube([GUARD_LENGTH,GUARD_HEIGHT1,LEG_WIDTH*2],center=true);
-    guardhole();
+    translate([-14,GUARD_Y_POS,0]) cube([GUARD_LENGTH,GUARD_HEIGHT1,GUARD_WIDTH],center=true);
+    union(){
+        guardhole();
+        connectors(less=0);
+        }
     }
+}
+module propeller_guard()
+{
+    translate([0,-16.5,-118.5]) rotate([0,-90,90]) guard();
+    guard2();
 }
 module main()
 {
-rotate([90,0,90]) leg_prop();
-translate([130,0,-50]) rotate([0,0,180]) guard();
+leg_prop();    
+propeller_guard();
 }
-//guard();
-//leg_prop();
-import("stls/leg_combined.stl", convexity=3);
-//difference()
-//{
-//    guard2();
-//    connectors(less=0);
-//}
-//main();
+
+
+main();
+
+//temporary artifacts
+//leg_prop();//the output of this command should be reloaded in the meshmixer and used to regenerate "leg_combined.stl" 
+
+//final artifacts
+//import("stls/leg_combined.stl", convexity=3);
+//rotate([-90,0,0]) propeller_guard();
