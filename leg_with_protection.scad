@@ -1,14 +1,14 @@
 use <hex_trap.scad>
 LEG_WIDTH=10.1;
-STRENGHTEN_LEG_LENGTH=120;
+STRENGHTEN_LEG_LENGTH=60;
 STRENGHTEN_LEG_THICK=4;
 START_X_LEG=16;
 LEG_DIAMETER=18.5;
 CONNECTOR_WIDTH=5;
-CONNECTOR1_LENGTH=45;
+CONNECTOR1_LENGTH=30;
 CONNECTOR1_X=10;
 CONNECTOR1_Y=-24;
-CONNECTOR2_LENGTH=40;
+CONNECTOR2_LENGTH=30;
 CONNECTOR2_X=4;
 CONNECTOR2_Y=-40;
 CONNECTOR_LESS=0.2;
@@ -21,8 +21,9 @@ NUT_HEIGHT_M3=2.5;
 //GUARD MAIN BOX
 GUARD_Y_POS=-31.5;
 GUARD_HEIGHT1=30;
-GUARD_LENGTH=30;
+GUARD_LENGTH=40;
 GUARD_WIDTH=LEG_WIDTH*2+5;
+SLICE_HEIGHT=2.8;
 module connectors(less)
 {
     //CONNECTION SLOT
@@ -31,9 +32,13 @@ module connectors(less)
     translate([CONNECTOR2_X,CONNECTOR2_Y,0]) color([0,1,0]) rotate([0,0,-8]) cube([5,CONNECTOR_WIDTH,LEG_WIDTH],center=true);
     translate([CONNECTOR2_X-CONNECTOR2_LENGTH/2,CONNECTOR2_Y,0])cube([CONNECTOR2_LENGTH,CONNECTOR_WIDTH-less,LEG_WIDTH-less],center=true);
 }
-module leg_prop()
+module leg_stl_only()
 {
     translate([0,0,-11.7]) import("stls/F450_leg-mine_long.stl", convexity=3);
+}
+module leg_prop()
+{
+    leg_stl_only();
     //LEG EXTENSION
     translate([START_X_LEG-STRENGHTEN_LEG_THICK/2,-16+STRENGHTEN_LEG_LENGTH/2,0]) cube([STRENGHTEN_LEG_THICK,STRENGHTEN_LEG_LENGTH,LEG_WIDTH],center=true);
     translate([START_X_LEG+LEG_DIAMETER+STRENGHTEN_LEG_THICK/2,-16+STRENGHTEN_LEG_LENGTH/2,0]) cube([STRENGHTEN_LEG_THICK,STRENGHTEN_LEG_LENGTH,LEG_WIDTH],center=true);
@@ -54,45 +59,72 @@ module leg_prop()
         guardhole();
     }
 }
-module guard()
+module sub_guard()
 {
-    
     difference(){
     import("stls/Protection_hlices_v6.stl", convexity=3);
-    translate([120,10,8.0])#cube([40,20,10],center=true);
+    translate([120,10,8.0])cube([400,400,10],center=true);
     }
+}
+module sub_guard_slice()
+{
+
+    intersection(){
+    sub_guard();
+    translate([120,10,0.1+SLICE_HEIGHT/2]) cube([400,400,SLICE_HEIGHT],center=true);}
+   
+    
+}
+module guard()
+{
+    sub_guard();
+
+    translate([0,0,-SLICE_HEIGHT]) sub_guard_slice();
+
 }
 module guardhole()
 {
-    translate([-GUARD_LENGTH/2,GUARD_Y_POS-GUARD_HEIGHT1/2-0.1,0]) color([0,0,1])rotate([90,0,0]) hex_hole(h_trap=NUT_HEIGHT_M3+0.1,h_hole=GUARD_HEIGHT1-NUT_HEIGHT_M3+0.1,r_trap=SCREW_STANDARD_M3,rot=180);
+    translate([-GUARD_LENGTH/2+13,GUARD_Y_POS-GUARD_HEIGHT1/2-0.1,0]) color([0,0,1])rotate([90,0,0]) hex_hole(h_trap=NUT_HEIGHT_M3+0.1,h_hole=GUARD_HEIGHT1-NUT_HEIGHT_M3+0.1,r_trap=SCREW_STANDARD_M3,rot=180);
 }
 module guard2()
 {
+    
     difference(){
-    translate([-14,GUARD_Y_POS,0]) cube([GUARD_LENGTH,GUARD_HEIGHT1,GUARD_WIDTH],center=true);
+    translate([16-GUARD_LENGTH/2,GUARD_Y_POS,0]) cube([GUARD_LENGTH,GUARD_HEIGHT1,GUARD_WIDTH],center=true);
     union(){
         guardhole();
         connectors(less=0);
+        translate([0,0,10])  leg_stl_only();
+         leg_stl_only();
+        translate([0,0,-10])  leg_stl_only();
+        translate([9-GUARD_LENGTH,GUARD_Y_POS+GUARD_HEIGHT1/2,0]) rotate([0,0,60]) cube([GUARD_LENGTH,GUARD_HEIGHT1,GUARD_WIDTH],center=true);
+        translate([18,-30,0]) rotate([0,0,-20]) cube([15,60,60],center=true);
         }
     }
 }
 module propeller_guard()
 {
-    translate([0,-16.5,-118.5]) rotate([0,-90,90]) guard();
+    difference(){
+    translate([0,-43.5,-118.5]) rotate([0,-90,90]) guard();
+        connectors(less=0);
+    }
     guard2();
 }
 module main()
 {
-leg_prop();    
+
+mirror([0,0,1]) leg_prop();    
 propeller_guard();
 }
 
 
-main();
+//main();
 
 //temporary artifacts
 //leg_prop();//the output of this command should be reloaded in the meshmixer and used to regenerate "leg_combined.stl" 
 
 //final artifacts
 //import("stls/leg_combined.stl", convexity=3);
-//rotate([-90,0,0]) propeller_guard();
+rotate([90,0,0]) propeller_guard();
+
+//guard2();
