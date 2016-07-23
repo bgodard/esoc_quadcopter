@@ -11,7 +11,7 @@ CONNECTOR1_Y=-24;
 CONNECTOR2_LENGTH=30;
 CONNECTOR2_X=4;
 CONNECTOR2_Y=-40;
-CONNECTOR_LESS=0.2;
+CONNECTOR_LESS=1.0;
 //Screw standards
 SCREW_STANDARD_M2=2;
 SCREW_STANDARD_M3=3;
@@ -27,10 +27,10 @@ SLICE_HEIGHT=2.8;
 module connectors(less)
 {
     //CONNECTION SLOT
-    translate([CONNECTOR1_X,CONNECTOR1_Y,0]) color([0,1,0]) rotate([0,0,-8]) cube([5,CONNECTOR_WIDTH,LEG_WIDTH],center=true);
-    translate([CONNECTOR1_X-CONNECTOR1_LENGTH/2,CONNECTOR1_Y,0])cube([CONNECTOR1_LENGTH,CONNECTOR_WIDTH-less,LEG_WIDTH-less],center=true);
-    translate([CONNECTOR2_X,CONNECTOR2_Y,0]) color([0,1,0]) rotate([0,0,-8]) cube([5,CONNECTOR_WIDTH,LEG_WIDTH],center=true);
-    translate([CONNECTOR2_X-CONNECTOR2_LENGTH/2,CONNECTOR2_Y,0])cube([CONNECTOR2_LENGTH,CONNECTOR_WIDTH-less,LEG_WIDTH-less],center=true);
+    translate([CONNECTOR1_X,CONNECTOR1_Y,-CONNECTOR_LESS/2]) color([0,1,0]) rotate([0,0,-8]) cube([5,CONNECTOR_WIDTH-less,LEG_WIDTH-less],center=true);
+    translate([CONNECTOR1_X-CONNECTOR1_LENGTH/2,CONNECTOR1_Y,-CONNECTOR_LESS/2])cube([CONNECTOR1_LENGTH,CONNECTOR_WIDTH-less,LEG_WIDTH-less],center=true);
+    translate([CONNECTOR2_X,CONNECTOR2_Y,-CONNECTOR_LESS/2]) color([0,1,0]) rotate([0,0,-8]) cube([5,CONNECTOR_WIDTH-less,LEG_WIDTH-less],center=true);
+    translate([CONNECTOR2_X-CONNECTOR2_LENGTH/2,CONNECTOR2_Y,-CONNECTOR_LESS/2])cube([CONNECTOR2_LENGTH,CONNECTOR_WIDTH-less,LEG_WIDTH-less],center=true);
 }
 module leg_stl_only()
 {
@@ -55,9 +55,10 @@ module leg_prop()
     }
     difference()
     {
-    connectors(less=CONNECTOR_LESS);
+        connectors(less=CONNECTOR_LESS);
         guardhole();
     }
+    //connectors(less=0);
 }
 module sub_guard()
 {
@@ -124,8 +125,17 @@ propeller_guard();
 //leg_prop();//the output of this command should be reloaded in the meshmixer and used to regenerate "leg_combined.stl" 
 
 //final artifacts
-
 rotate([0,180,0]) mirror([0,0,1]) import("stls/leg_combined.stl", convexity=3);
+
 //rotate([90,0,0]) propeller_guard();
 
 //guard2();
+
+//TEMPORARY
+/*
+difference()
+    {
+        connectors(less=CONNECTOR_LESS);
+        guardhole();
+    }
+    */
