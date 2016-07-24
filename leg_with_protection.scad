@@ -11,7 +11,7 @@ CONNECTOR1_Y=-24;
 CONNECTOR2_LENGTH=30;
 CONNECTOR2_X=4;
 CONNECTOR2_Y=-40;
-CONNECTOR_LESS=1.0;
+CONNECTOR_LESS=0.5;
 //Screw standards
 SCREW_STANDARD_M2=2;
 SCREW_STANDARD_M3=3;
@@ -122,10 +122,10 @@ propeller_guard();
 //main();
 
 //temporary artifacts
-//leg_prop();//the output of this command should be reloaded in the meshmixer and used to regenerate "leg_combined.stl" 
+leg_prop();//the output of this command should be reloaded in the meshmixer and used to regenerate "leg_combined.stl" 
 
 //final artifacts
-rotate([0,180,0]) mirror([0,0,1]) import("stls/leg_combined.stl", convexity=3);
+//rotate([0,180,0]) mirror([0,0,1]) import("stls/leg_combined.stl", convexity=3);
 
 //rotate([90,0,0]) propeller_guard();
 
