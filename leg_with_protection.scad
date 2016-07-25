@@ -24,6 +24,15 @@ GUARD_HEIGHT1=30;
 GUARD_LENGTH=40;
 GUARD_WIDTH=LEG_WIDTH*2+5;
 SLICE_HEIGHT=2.8;
+ZIPTIE_WIDTH=4;
+module zip_ties_back()
+{
+    //CONNECTION SLOT
+    translate([39,CONNECTOR1_Y+ZIPTIE_WIDTH+ZIPTIE_WIDTH/2,0]) color([0,1,1]) rotate([0,0,0]) cube([5,ZIPTIE_WIDTH,LEG_WIDTH],center=true);
+    
+    translate([39,CONNECTOR2_Y-ZIPTIE_WIDTH,0]) color([0,1,1]) rotate([0,0,0]) cube([5,ZIPTIE_WIDTH,LEG_WIDTH],center=true);
+    
+}
 module connectors(less)
 {
     //CONNECTION SLOT
@@ -43,7 +52,10 @@ module leg_prop()
     translate([START_X_LEG-STRENGHTEN_LEG_THICK/2,-16+STRENGHTEN_LEG_LENGTH/2,0]) cube([STRENGHTEN_LEG_THICK,STRENGHTEN_LEG_LENGTH,LEG_WIDTH],center=true);
     translate([START_X_LEG+LEG_DIAMETER+STRENGHTEN_LEG_THICK/2,-16+STRENGHTEN_LEG_LENGTH/2,0]) cube([STRENGHTEN_LEG_THICK,STRENGHTEN_LEG_LENGTH,LEG_WIDTH],center=true);
     STRENGHTEN_LEG_LENGTH_EXTRA=40;
+    difference(){
     translate([START_X_LEG+LEG_DIAMETER+STRENGHTEN_LEG_THICK/2,-52+STRENGHTEN_LEG_LENGTH_EXTRA/2,0]) cube([STRENGHTEN_LEG_THICK,STRENGHTEN_LEG_LENGTH_EXTRA,LEG_WIDTH],center=true);
+    zip_ties_back();
+    }
     difference()
     {
     translate([START_X_LEG+LEG_DIAMETER/2,-16+STRENGHTEN_LEG_LENGTH,0])  cylinder(h=LEG_WIDTH,r=LEG_DIAMETER/2+STRENGHTEN_LEG_THICK,center=true);
@@ -138,4 +150,4 @@ difference()
         connectors(less=CONNECTOR_LESS);
         guardhole();
     }
-    */
+*/
