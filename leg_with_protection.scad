@@ -80,8 +80,13 @@ module leg_prop()
     zip_ties_back();
     }
     difference(){
-    leg_prop_front_piece();
-    zip_ties_front();}
+        leg_prop_front_piece();
+        union(){
+            zip_ties_front();
+            translate([0,-51.3,0])cube([10,10,11],center=true);
+            }
+        }
+        
     difference()
     {
     translate([START_X_LEG+LEG_DIAMETER/2,-16+STRENGHTEN_LEG_LENGTH,0])  cylinder(h=LEG_WIDTH,r=LEG_DIAMETER/2+STRENGHTEN_LEG_THICK,center=true);
@@ -98,10 +103,12 @@ module leg_prop()
         {
         guardhole();
         zip_ties_front();
+        guard2_cutout();    
         }
     }
     //guardhole();
     //connectors(less=0);
+    
 }
 module sub_guard()
 {
@@ -131,6 +138,14 @@ module guardhole()
 {
     translate([-GUARD_LENGTH/2+13,GUARD_Y_POS-GUARD_HEIGHT1/2-0.1,0]) color([0,0,1])rotate([90,0,0]) hex_hole(h_trap=NUT_HEIGHT_M3+0.1,h_hole=GUARD_HEIGHT1-NUT_HEIGHT_M3+1.1,r_trap=SCREW_STANDARD_M3,rot=180);
 }
+module guard2_cutout()
+{
+    translate([9-GUARD_LENGTH,GUARD_Y_POS+GUARD_HEIGHT1/2,0]) rotate([0,0,60]) cube([GUARD_LENGTH,GUARD_HEIGHT1,GUARD_WIDTH],center=true);
+}
+module guard2_shape_out()
+{
+    translate([18,-30,0]) rotate([0,0,-20]) cube([15,60,60],center=true);
+}
 module guard2()
 {
     
@@ -146,8 +161,8 @@ module guard2()
         translate([0,0,10])  leg_stl_only();
          leg_stl_only();
         translate([0,0,-10])  leg_stl_only();
-        translate([9-GUARD_LENGTH,GUARD_Y_POS+GUARD_HEIGHT1/2,0]) rotate([0,0,60]) cube([GUARD_LENGTH,GUARD_HEIGHT1,GUARD_WIDTH],center=true);
-        translate([18,-30,0]) rotate([0,0,-20]) cube([15,60,60],center=true);
+        guard2_cutout();
+        guard2_shape_out();
         zip_ties_front();
         }
     }
@@ -174,13 +189,13 @@ propeller_guard();
 
 
 
-main();
+//main();
 
 //temporary artifacts
 //leg_prop();//the output of this command should be reloaded in the meshmixer and used to regenerate "leg_combined.stl" 
 
 //final artifacts
-//rotate([0,180,0]) mirror([0,0,1]) import("stls/leg_combined.stl", convexity=3);
+rotate([0,180,0]) mirror([0,0,1]) import("stls/leg_combined.stl", convexity=3);
 
 //rotate([90,0,0]) propeller_guard();
 
