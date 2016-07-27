@@ -34,12 +34,39 @@ ZIPTIE_HEIGHT=1.8;
 STRENGHTEN_LEG_LENGTH_EXTRA=40;
 
 SCALE_PROPELLER=0.9;
+module pressure_plate()
+{
+    difference(){
+        PRESSURE_PLATE_THICKNESS1=1;
+        PRESSURE_PLATE_LENGTH=-(CONNECTOR3_Y-CONNECTOR1_Y);
+        PRESSURE_PLATE_THICKNESS2=2;
+        union(){
+        translate([24,CONNECTOR2_Y,LEG_WIDTH/2+PRESSURE_PLATE_THICKNESS1/2]) color([1,0,0])cube([50,PRESSURE_PLATE_LENGTH,PRESSURE_PLATE_THICKNESS1],center=true);
+        translate([24,CONNECTOR2_Y,LEG_WIDTH/2-PRESSURE_PLATE_THICKNESS2/2]) color([1,0,0])cube([50,PRESSURE_PLATE_LENGTH*0.75,PRESSURE_PLATE_THICKNESS2],center=true);
+        }
+        union()
+        {
+            leg_prop();
+            //leg_stl_only();
+            DIFF_CUBE_X=15;
+    DIFF_CUBE_Y=45;
+    translate([46-DIFF_CUBE_X/2,-30-DIFF_CUBE_Y/2,0])#cube([DIFF_CUBE_X,DIFF_CUBE_Y,10]);
+    translate([-16-DIFF_CUBE_X/2,-30-DIFF_CUBE_Y/2,0]) rotate([0,0,-20])#cube([DIFF_CUBE_X,DIFF_CUBE_Y,10]);
+            DIFF_CUBE_X2=12;
+            DIFF_CUBE_Z=10;
+    translate([18-DIFF_CUBE_X2/2,-30-DIFF_CUBE_Y/2,-DIFF_CUBE_Z/2]) rotate([0,0,-13])#cube([DIFF_CUBE_X2,DIFF_CUBE_Y,DIFF_CUBE_Z]);        
+            zip_ties_back();
+            zip_ties_front();
+        }
+    }
+    
+}
 module zip_ties_back()
 {
     //CONNECTION SLOT
-    translate([39,CONNECTOR1_Y-ZIPTIE_WIDTH-ZIPTIE_WIDTH/2,0]) color([0,1,1]) rotate([0,0,0]) cube([5,ZIPTIE_WIDTH,LEG_WIDTH+0.2],center=true);
+    translate([39,CONNECTOR1_Y-ZIPTIE_WIDTH-ZIPTIE_WIDTH/2,0]) color([0,1,1]) rotate([0,0,0]) cube([5,ZIPTIE_WIDTH,LEG_WIDTH*2+0.2],center=true);
     
-    translate([39,CONNECTOR2_Y-ZIPTIE_WIDTH-ZIPTIE_WIDTH/2+1,0]) color([0,1,1]) rotate([0,0,0]) cube([5,ZIPTIE_WIDTH,LEG_WIDTH+0.2],center=true);
+    translate([39,CONNECTOR2_Y-ZIPTIE_WIDTH-ZIPTIE_WIDTH/2+1,0]) color([0,1,1]) rotate([0,0,0]) cube([5,ZIPTIE_WIDTH,LEG_WIDTH*2+0.2],center=true);
     
 }
 module zip_ties_front()
@@ -194,12 +221,16 @@ propeller_guard();
 //temporary artifacts
 //leg_prop();//the output of this command should be reloaded in the meshmixer and used to regenerate "leg_combined.stl" 
 
+
 //final artifacts
-rotate([0,180,0]) mirror([0,0,1]) import("stls/leg_combined.stl", convexity=3);
+//rotate([0,180,0]) mirror([0,0,1]) import("stls/leg_combined.stl", convexity=3);
 
 //rotate([90,0,0]) propeller_guard();
 
+mirror([0,0,1]) pressure_plate();
+
 //guard2();
+
 
 //TEMPORARY
 /*
