@@ -37,7 +37,7 @@ SCALE_PROPELLER=0.9;
 module pressure_plate()
 {
     difference(){
-        PRESSURE_PLATE_THICKNESS1=1;
+        PRESSURE_PLATE_THICKNESS1=3;
         PRESSURE_PLATE_LENGTH=-(CONNECTOR3_Y-CONNECTOR1_Y);
         PRESSURE_PLATE_THICKNESS2=2;
         union(){
@@ -47,11 +47,12 @@ module pressure_plate()
         union()
         {
             leg_prop();
+            guard2();
             //leg_stl_only();
             DIFF_CUBE_X=15;
     DIFF_CUBE_Y=45;
     translate([46-DIFF_CUBE_X/2,-30-DIFF_CUBE_Y/2,0])#cube([DIFF_CUBE_X,DIFF_CUBE_Y,10]);
-    translate([-16-DIFF_CUBE_X/2,-30-DIFF_CUBE_Y/2,0]) rotate([0,0,-20])#cube([DIFF_CUBE_X,DIFF_CUBE_Y,10]);
+    translate([-10-DIFF_CUBE_X/2,-30-DIFF_CUBE_Y/2,0]) rotate([0,0,-20])#cube([DIFF_CUBE_X,DIFF_CUBE_Y,10]);
             DIFF_CUBE_X2=12;
             DIFF_CUBE_Z=10;
     translate([18-DIFF_CUBE_X2/2,-30-DIFF_CUBE_Y/2,-DIFF_CUBE_Z/2]) rotate([0,0,-13])#cube([DIFF_CUBE_X2,DIFF_CUBE_Y,DIFF_CUBE_Z]);        
@@ -61,6 +62,7 @@ module pressure_plate()
     }
     
 }
+
 module zip_ties_back()
 {
     //CONNECTION SLOT
