@@ -32,40 +32,42 @@ SLICE_HEIGHT=2.8;
 ZIPTIE_WIDTH=4;
 ZIPTIE_HEIGHT=1.8;
 STRENGHTEN_LEG_LENGTH_EXTRA=40;
-
+PRESSURE_PLATE_THICKNESS1=1;
+PRESSURE_PLATE_LENGTH=-(CONNECTOR3_Y-CONNECTOR1_Y);
+PRESSURE_PLATE_THICKNESS2=2;
 SCALE_PROPELLER=0.9;
 module pressure_plate()
 {
-    PRESSURE_PLATE_THICKNESS1=3.5;
-    PRESSURE_PLATE_LENGTH=-(CONNECTOR3_Y-CONNECTOR1_Y);
-    PRESSURE_PLATE_THICKNESS2=2;
+    //guard3_hole();
+    difference(){
+        translate([24,-28,LEG_WIDTH/2-PRESSURE_PLATE_THICKNESS2/2+0.0]) color([1,0,1]) cube([SCREW_STANDARD_M3*2,SCREW_STANDARD_M3*2,PRESSURE_PLATE_THICKNESS1+PRESSURE_PLATE_THICKNESS2],center=true);
+        guard3_hole();
+    }
     difference(){
         
         union(){
         translate([24,CONNECTOR2_Y,LEG_WIDTH/2+PRESSURE_PLATE_THICKNESS1/2]) color([1,0,0])cube([50,PRESSURE_PLATE_LENGTH,PRESSURE_PLATE_THICKNESS1],center=true);
         translate([24,CONNECTOR2_Y,LEG_WIDTH/2-PRESSURE_PLATE_THICKNESS2/2]) color([1,0,0])cube([50,PRESSURE_PLATE_LENGTH*0.75,PRESSURE_PLATE_THICKNESS2],center=true);
+            
         }
         union()
         {
             leg_prop();
-            guard2();
-            leg_stl_only();
-            translate([3,0,0])                    leg_prop_front_piece();
+            //leg_stl_only();
             DIFF_CUBE_X=15;
     DIFF_CUBE_Y=45;
     translate([46-DIFF_CUBE_X/2,-30-DIFF_CUBE_Y/2,0])#cube([DIFF_CUBE_X,DIFF_CUBE_Y,10]);
-    translate([-10-DIFF_CUBE_X/2,-30-DIFF_CUBE_Y/2,0]) rotate([0,0,-20])#cube([DIFF_CUBE_X,DIFF_CUBE_Y,10]);
+    translate([-16-DIFF_CUBE_X/2,-30-DIFF_CUBE_Y/2,0]) rotate([0,0,-20])#cube([DIFF_CUBE_X,DIFF_CUBE_Y,10]);
             DIFF_CUBE_X2=12;
             DIFF_CUBE_Z=10;
-    translate([18-DIFF_CUBE_X2/2,-30-DIFF_CUBE_Y/2,-DIFF_CUBE_Z/2]) rotate([0,0,-13])#cube([DIFF_CUBE_X2,DIFF_CUBE_Y,DIFF_CUBE_Z]);  
-      translate([25-DIFF_CUBE_X2/2,-30-DIFF_CUBE_Y/2,-DIFF_CUBE_Z/2]) rotate([0,0,-0])#cube([DIFF_CUBE_X2,DIFF_CUBE_Y,DIFF_CUBE_Z]);      
+    translate([18-DIFF_CUBE_X2/2,-30-DIFF_CUBE_Y/2,-DIFF_CUBE_Z/2]) rotate([0,0,-13])#cube([DIFF_CUBE_X2,DIFF_CUBE_Y,DIFF_CUBE_Z]);        
             zip_ties_back();
             zip_ties_front();
+            guard3_hole();
         }
     }
     
 }
-
 module zip_ties_back()
 {
     //CONNECTION SLOT
@@ -102,6 +104,7 @@ module leg_prop_front_piece()
 }
 module leg_prop()
 {
+    guard3();
     leg_stl_only();
     //LEG EXTENSION
     translate([START_X_LEG-STRENGHTEN_LEG_THICK/2,-16+STRENGHTEN_LEG_LENGTH/2,0]) cube([STRENGHTEN_LEG_THICK,STRENGHTEN_LEG_LENGTH,LEG_WIDTH],center=true);
@@ -199,6 +202,18 @@ module guard2()
         }
     }
 }
+module guard3_hole()
+{
+    translate([24,-28,-LEG_WIDTH/2-0.1]) rotate([180,0,0]) color([1,1,1]) hex_hole(h_trap=NUT_HEIGHT_M3+0.1,h_hole=LEG_WIDTH-NUT_HEIGHT_M3+1.1,r_trap=SCREW_STANDARD_M3,rot=180);
+}
+module guard3()
+{
+    
+    difference(){
+    translate([24,-28,NUT_HEIGHT_M3-LEG_WIDTH/2+0.0]) color([1,0,0]) cube([SCREW_STANDARD_M3*2+2.5,SCREW_STANDARD_M3*2+1.5,NUT_HEIGHT_M3*2],center=true);
+    guard3_hole();
+    }
+}
 module propeller_guard()
 {
     difference(){
@@ -216,6 +231,9 @@ module main()
 
 mirror([0,0,1]) leg_prop();    
 propeller_guard();
+mirror([0,0,1]) pressure_plate();
+
+//guard3_hole();
 }
 
 
@@ -231,7 +249,7 @@ propeller_guard();
 //rotate([0,180,0]) mirror([0,0,1]) import("stls/leg_combined.stl", convexity=3);
 
 //rotate([90,0,0]) propeller_guard();
-
+//pressure_plate();
 mirror([0,0,1]) pressure_plate();
 
 //guard2();
