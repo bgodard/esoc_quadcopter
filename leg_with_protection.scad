@@ -179,7 +179,7 @@ module guardhole()
 }
 module guard2_cutout()
 {
-    translate([9-GUARD_LENGTH,-5+GUARD_Y_POS+GUARD_HEIGHT1/2,0]) rotate([0,0,70]) cube([GUARD_LENGTH*3,GUARD_HEIGHT1,GUARD_WIDTH*3],center=true);
+    translate([9-GUARD_LENGTH,-5+GUARD_Y_POS+GUARD_HEIGHT1/2,0]) rotate([0,0,70]) cube([GUARD_LENGTH*1.7,GUARD_HEIGHT1,GUARD_WIDTH*3],center=true);
 }
 module guard2_shape_out()
 {
@@ -266,11 +266,11 @@ mirror([0,0,1]) pressure_plate();
 
 
 //final artifacts
-//rotate([0,180,0]) mirror([0,0,1]) import("stls/leg_combined.stl", convexity=3);
+rotate([0,180,0]) mirror([0,0,1]) import("stls/leg_combined.stl", convexity=3);
 
 //rotate([90,0,0]) propeller_guard();
 //pressure_plate();
-mirror([0,0,1]) pressure_plate();
+//mirror([0,0,1]) pressure_plate();
 
 //guard2();
 
