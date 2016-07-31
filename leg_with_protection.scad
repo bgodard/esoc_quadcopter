@@ -278,7 +278,7 @@ mirror([0,0,1]) pressure_plate();
 
 
 //final artifacts
-rotate([0,180,0]) mirror([0,0,1]) import("stls/leg_combined.stl", convexity=3);
+//rotate([0,180,0]) mirror([0,0,1]) import("stls/leg_combined.stl", convexity=3);
 
 //rotate([90,0,0]) propeller_guard();
 //pressure_plate();
@@ -302,5 +302,5 @@ difference()
     translate([0,-35,0])#cube([60,60,60],center=true);
 }
 */
-//translate([0,20,GUARD_HEIGHT1+LEG_WIDTH]) rotate([90,0,0]) guard2();
+translate([0,20,GUARD_HEIGHT1+LEG_WIDTH]) rotate([90,0,0]) guard2();
 //translate([0,-57,0])cube([5,5,5],center=true);
