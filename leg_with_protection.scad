@@ -7,14 +7,14 @@ LEG_DIAMETER=18.5;
 CONNECTOR_WIDTH=5;
 CONNECTOR1_LENGTH=30;
 
-CONNECTOR1_X=3;
-CONNECTOR1_Y=-36.0;
+CONNECTOR1_X=6;
+CONNECTOR1_Y=-26.0;
 CONNECTOR2_LENGTH=30;
-CONNECTOR2_X=-1;
+CONNECTOR2_X=2;
 
 CONNECTOR3_LENGTH=30;
-CONNECTOR3_X=-4.8;
-CONNECTOR3_Y=-62;
+CONNECTOR3_X=-2.8;
+CONNECTOR3_Y=-52;
 CONNECTOR2_Y=(CONNECTOR1_Y+CONNECTOR3_Y)/2;
 CONNECTOR_LESS=0.5;
 //Screw standards
@@ -41,7 +41,7 @@ HOLE1_X=23;
 HOLE1_Y=-47;
 
 PROP_GUARD_X_OFFSET=-7;
-PROP_GUARD_Y_OFFSET=-17.5;
+PROP_GUARD_Y_OFFSET=-7.5;
 
 module pressure_plate()
 {
@@ -56,8 +56,8 @@ module pressure_plate()
     difference(){
         
         union(){
-        translate([24,CONNECTOR2_Y+10,LEG_WIDTH/2+PRESSURE_PLATE_THICKNESS1/2]) color([1,0,0])cube([50,10+PRESSURE_PLATE_LENGTH,PRESSURE_PLATE_THICKNESS1],center=true);
-        translate([24,CONNECTOR2_Y+10,LEG_WIDTH/2-PRESSURE_PLATE_THICKNESS2/2]) color([1,0,0])cube([50,10+PRESSURE_PLATE_LENGTH*0.75,PRESSURE_PLATE_THICKNESS2],center=true);
+        translate([24,CONNECTOR2_Y+2,LEG_WIDTH/2+PRESSURE_PLATE_THICKNESS1/2]) color([1,0,0])cube([50,10+PRESSURE_PLATE_LENGTH,PRESSURE_PLATE_THICKNESS1],center=true);
+        translate([24,CONNECTOR2_Y+2,LEG_WIDTH/2-PRESSURE_PLATE_THICKNESS2/2]) color([1,0,0])cube([50,10+PRESSURE_PLATE_LENGTH*0.75,PRESSURE_PLATE_THICKNESS2],center=true);
             
         }
         union()
@@ -100,7 +100,9 @@ module leg_stl_only()
 }
 module leg_prop_front_piece()
 {
-    translate([START_X_LEG+LEG_DIAMETER+STRENGHTEN_LEG_THICK/2-29,-52+STRENGHTEN_LEG_LENGTH_EXTRA/2,0]) rotate([0,0,-21]) cube([STRENGHTEN_LEG_THICK,STRENGHTEN_LEG_LENGTH_EXTRA+30,LEG_WIDTH],center=true);
+    difference(){
+    translate([START_X_LEG+LEG_DIAMETER+STRENGHTEN_LEG_THICK/2-29,-52+STRENGHTEN_LEG_LENGTH_EXTRA/2,0]) rotate([0,0,-21]) cube([STRENGHTEN_LEG_THICK,STRENGHTEN_LEG_LENGTH_EXTRA+12,LEG_WIDTH],center=true);
+    color([1,0,0])translate([START_X_LEG-STRENGHTEN_LEG_THICK/2-16,-57.5,0]) cube([8,5,LEG_WIDTH+1],center=true);}
 }
 module leg_inner_bottom()
 {
@@ -116,7 +118,7 @@ module leg_prop()
     translate([START_X_LEG+LEG_DIAMETER+STRENGHTEN_LEG_THICK/2,-16+STRENGHTEN_LEG_LENGTH/2,0]) cube([STRENGHTEN_LEG_THICK,STRENGHTEN_LEG_LENGTH,LEG_WIDTH],center=true);
     
     difference(){
-    translate([START_X_LEG+LEG_DIAMETER+STRENGHTEN_LEG_THICK/2,-60+STRENGHTEN_LEG_LENGTH_EXTRA/2,0]) cube([STRENGHTEN_LEG_THICK,STRENGHTEN_LEG_LENGTH_EXTRA+10,LEG_WIDTH],center=true);
+    translate([START_X_LEG+LEG_DIAMETER+STRENGHTEN_LEG_THICK/2,-55+STRENGHTEN_LEG_LENGTH_EXTRA/2,0]) cube([STRENGHTEN_LEG_THICK,STRENGHTEN_LEG_LENGTH_EXTRA+0,LEG_WIDTH],center=true);
     }
     //leg_inner_bottom();
     difference(){
@@ -175,11 +177,12 @@ module guard()
 }
 module guardhole()
 {
-    translate([-GUARD_LENGTH/2+5,GUARD_Y_POS-GUARD_HEIGHT1/2-18-0.1,0]) color([0,0,1])rotate([90,0,0]) hex_hole(h_trap=NUT_HEIGHT_M3+0.1,h_hole=GUARD_HEIGHT1-NUT_HEIGHT_M3+1.1,r_trap=SCREW_STANDARD_M3,rot=180);
+    translate([-GUARD_LENGTH/2+9,GUARD_Y_POS-GUARD_HEIGHT1/2-8-0.1,0]) color([0,0,1])rotate([90,0,0]) hex_hole(h_trap=NUT_HEIGHT_M3+0.1,h_hole=GUARD_HEIGHT1-NUT_HEIGHT_M3+1.1,r_trap=SCREW_STANDARD_M3,rot=180);
 }
 module guard2_cutout()
 {
-    translate([9-GUARD_LENGTH,-5+GUARD_Y_POS+GUARD_HEIGHT1/2,0]) rotate([0,0,70]) cube([GUARD_LENGTH*1.7,GUARD_HEIGHT1,GUARD_WIDTH*3],center=true);
+    translate([9-GUARD_LENGTH,-5+GUARD_Y_POS+GUARD_HEIGHT1/2,0]) rotate([0,0,70]) cube([GUARD_LENGTH*1.23,GUARD_HEIGHT1,GUARD_WIDTH*3],center=true);
+    translate([9-GUARD_LENGTH-14,-8+GUARD_Y_POS+GUARD_HEIGHT1/2,0]) rotate([0,0,90]) cube([GUARD_LENGTH*1.23,GUARD_HEIGHT1,GUARD_WIDTH*3],center=true);
 }
 module guard2_shape_out()
 {
@@ -195,7 +198,7 @@ module guard2()
         union(){
     translate([10-GUARD_LENGTH/2,GUARD_Y_POS-GUARD_HEIGHT1/2+SLICE_HEIGHT+PROP_GUARD_Y_OFFSET,0]) cube([GUARD_LENGTH-20,SLICE_HEIGHT*2,GUARD_WIDTH*2],center=true);
     guard2_round_interface();
-    translate([6-GUARD_LENGTH/2,GUARD_Y_POS+PROP_GUARD_Y_OFFSET,0]) cube([GUARD_LENGTH,GUARD_HEIGHT1,GUARD_WIDTH],center=true);
+    translate([12-GUARD_LENGTH/2,GUARD_Y_POS+PROP_GUARD_Y_OFFSET,0]) cube([GUARD_LENGTH,GUARD_HEIGHT1,GUARD_WIDTH],center=true);
         }
     union(){
         guardhole();
@@ -206,7 +209,7 @@ module guard2()
         translate([0,0,-10])  leg_stl_only();
         difference(){
         guard2_cutout();
-            guard2_round_interface();
+        guard2_round_interface();
         }
         guard2_shape_out();
         }
@@ -266,11 +269,11 @@ mirror([0,0,1]) pressure_plate();
 
 
 //final artifacts
-rotate([0,180,0]) mirror([0,0,1]) import("stls/leg_combined.stl", convexity=3);
+//rotate([0,180,0]) mirror([0,0,1]) import("stls/leg_combined.stl", convexity=3);
 
 //rotate([90,0,0]) propeller_guard();
 //pressure_plate();
-//mirror([0,0,1]) pressure_plate();
+mirror([0,0,1]) pressure_plate();
 
 //guard2();
 
@@ -291,3 +294,4 @@ difference()
 }
 */
 //translate([0,20,GUARD_HEIGHT1+LEG_WIDTH]) rotate([90,0,0]) guard2();
+//translate([0,-57,0])cube([5,5,5],center=true);
