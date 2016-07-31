@@ -42,7 +42,10 @@ HOLE1_Y=-47;
 
 PROP_GUARD_X_OFFSET=-7;
 PROP_GUARD_Y_OFFSET=-7.5;
-
+module top_out_diff_corner()
+{
+    translate([37,-54,6])cube([12,14,35],center=true);
+}
 module pressure_plate()
 {
     //guard3_hole();
@@ -53,15 +56,18 @@ module pressure_plate()
         }
         guard3_hole();
     }
+    
     difference(){
         
         union(){
+            
         translate([24,CONNECTOR2_Y+2,LEG_WIDTH/2+PRESSURE_PLATE_THICKNESS1/2]) color([1,0,0])cube([50,10+PRESSURE_PLATE_LENGTH,PRESSURE_PLATE_THICKNESS1],center=true);
         translate([24,CONNECTOR2_Y+2,LEG_WIDTH/2-PRESSURE_PLATE_THICKNESS2/2]) color([1,0,0])cube([50,10+PRESSURE_PLATE_LENGTH*0.75,PRESSURE_PLATE_THICKNESS2],center=true);
             
         }
         union()
         {
+            top_out_diff_corner();
             leg_prop();
             guard2();
             leg_stl_only();
@@ -119,12 +125,14 @@ module leg_prop()
     
     difference(){
     translate([START_X_LEG+LEG_DIAMETER+STRENGHTEN_LEG_THICK/2,-55+STRENGHTEN_LEG_LENGTH_EXTRA/2,0]) cube([STRENGHTEN_LEG_THICK,STRENGHTEN_LEG_LENGTH_EXTRA+0,LEG_WIDTH],center=true);
+        top_out_diff_corner();
     }
     //leg_inner_bottom();
     difference(){
         leg_prop_front_piece();
         union(){
             //translate([0,-51.3,0])#cube([10,10,11],center=true);
+            
             leg_inner_bottom();
             }
         }
@@ -136,6 +144,7 @@ module leg_prop()
         {
             translate([START_X_LEG+LEG_DIAMETER/2,-16+STRENGHTEN_LEG_LENGTH,0]) color([1,0,0]) cylinder(h=LEG_WIDTH+0.1,r=LEG_DIAMETER/2,center=true);
     translate([START_X_LEG+LEG_DIAMETER/2,-16+STRENGHTEN_LEG_LENGTH-LEG_DIAMETER/2,0]) color([1,0,0]) cube([LEG_DIAMETER,LEG_DIAMETER,LEG_WIDTH+0.1],center=true);
+            
         }
     }
     difference()
@@ -269,11 +278,11 @@ mirror([0,0,1]) pressure_plate();
 
 
 //final artifacts
-//rotate([0,180,0]) mirror([0,0,1]) import("stls/leg_combined.stl", convexity=3);
+rotate([0,180,0]) mirror([0,0,1]) import("stls/leg_combined.stl", convexity=3);
 
 //rotate([90,0,0]) propeller_guard();
 //pressure_plate();
-mirror([0,0,1]) pressure_plate();
+//mirror([0,0,1]) pressure_plate();
 
 //guard2();
 
