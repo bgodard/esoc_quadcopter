@@ -210,6 +210,7 @@ module guard2()
     translate([12-GUARD_LENGTH/2,GUARD_Y_POS+PROP_GUARD_Y_OFFSET,0]) cube([GUARD_LENGTH,GUARD_HEIGHT1,GUARD_WIDTH],center=true);
         }
     union(){
+        propeller_cut_operating_shape();
         guardhole();
         connectors(less=0);
         leg_prop_front_piece();
@@ -245,13 +246,33 @@ module guard3()
     }
     
 }
+module propeller_cut_operating_shape()
+{
+    local_width=LEG_WIDTH+9;
+    for (i=[-1,1])
+    {
+    translate([-CONNECTOR1_LENGTH/2+3.6,-SLICE_HEIGHT-48.4,i*(local_width+15)/2]) cube([30,SLICE_HEIGHT*2+0.2,local_width],center=true);
+    }
+}
+module propeller_thin_struts()
+{
+    local_width=5.5;
+    for (i=[-1,1])
+    {
+    translate([-CONNECTOR1_LENGTH/2+1.3,-SLICE_HEIGHT-48.4,i*(local_width+17)/2]) rotate([0,61*i,0])cube([40,SLICE_HEIGHT*2+0.2,local_width],center=true);
+    }
+}
 module propeller_guard()
 {
-    
+    intersection(){
+    propeller_thin_struts();
+    propeller_cut_operating_shape();
+    }
     difference(){
         translate([0,-43.5,-118.5]) rotate([0,-90,90]) guard();
         union(){
         connectors(less=0);
+        propeller_cut_operating_shape();
         }
     }
     guard2();
@@ -279,8 +300,8 @@ mirror([0,0,1]) pressure_plate();
 
 //final artifacts
 //rotate([0,180,0]) mirror([0,0,1]) import("stls/leg_combined.stl", convexity=3);
-
-//rotate([90,0,0]) propeller_guard();
+//propeller_guard();
+rotate([90,0,0]) propeller_guard();
 //pressure_plate();
 //mirror([0,0,1]) pressure_plate();
 
@@ -302,5 +323,5 @@ difference()
     translate([0,-35,0])#cube([60,60,60],center=true);
 }
 */
-translate([0,20,GUARD_HEIGHT1+LEG_WIDTH]) rotate([90,0,0]) guard2();
+//translate([0,20,GUARD_HEIGHT1+LEG_WIDTH]) rotate([90,0,0]) guard2();
 //translate([0,-57,0])cube([5,5,5],center=true);
