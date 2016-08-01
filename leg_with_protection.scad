@@ -45,9 +45,14 @@ PROP_GUARD_Y_OFFSET=-7.5;
 module top_out_diff_corner()
 {
     translate([37,-54,6])cube([12,14,35],center=true);
+    translate([37,-54,6]) rotate([0,45,0])cube([12,14,35],center=true);
 }
 module pressure_plate()
 {
+    DIFF_CUBE_X=15;
+    DIFF_CUBE_Y=55;
+    DIFF_CUBE_X2=12;
+    DIFF_CUBE_Z=10;
     //guard3_hole();
     difference(){
         union(){
@@ -56,31 +61,45 @@ module pressure_plate()
         }
         guard3_hole();
     }
-    
+    //#top_out_diff_corner();
+    OP_SHAPE_LENGTH=30;
+    OP_SHAPE_WIDTH=3.4;
+    OP_SHAPE_HEIGHT=1;
+    //Angled pad
+    intersection(){
+        translate([32.8-OP_SHAPE_WIDTH/2,-OP_SHAPE_LENGTH/2-27.3,-OP_SHAPE_HEIGHT/2+2.8])cube([OP_SHAPE_WIDTH,20,OP_SHAPE_HEIGHT]);
+        translate([32.8-OP_SHAPE_WIDTH/2,-OP_SHAPE_LENGTH/2-27.3,-OP_SHAPE_HEIGHT/2+3.8]) rotate([-3,0,0])cube([OP_SHAPE_WIDTH,40,OP_SHAPE_HEIGHT]);}
+    local_angle=-21;
+    local_shift=-22-0.5;
+    local_shift_y=2-1;
+    OP_SHAPE_WIDTH2=1.9;
+    intersection(){
+        translate([local_shift+32.8-OP_SHAPE_WIDTH2/2,-OP_SHAPE_LENGTH/2-27.3+local_shift_y,-OP_SHAPE_HEIGHT/2+2.8]) rotate([0,0,local_angle])cube([OP_SHAPE_WIDTH2,20,OP_SHAPE_HEIGHT]);
+        translate([local_shift+32.8-OP_SHAPE_WIDTH2/2,-OP_SHAPE_LENGTH/2-27.3+local_shift_y,-OP_SHAPE_HEIGHT/2+3.8]) rotate([-3,0,0])rotate([0,0,local_angle])cube([OP_SHAPE_WIDTH2,40,OP_SHAPE_HEIGHT]);}
+        //translate([32.8-OP_SHAPE_WIDTH/2,-OP_SHAPE_LENGTH/2-27.3,-OP_SHAPE_HEIGHT/2+3.6]) rotate([-3,0,0])cube([OP_SHAPE_WIDTH,40,OP_SHAPE_HEIGHT]);
     difference(){
         
         union(){
             
         translate([24,CONNECTOR2_Y+2,LEG_WIDTH/2+PRESSURE_PLATE_THICKNESS1/2]) color([1,0,0])cube([50,10+PRESSURE_PLATE_LENGTH,PRESSURE_PLATE_THICKNESS1],center=true);
-        translate([24,CONNECTOR2_Y+2,LEG_WIDTH/2-PRESSURE_PLATE_THICKNESS2/2]) color([1,0,0])cube([50,10+PRESSURE_PLATE_LENGTH*0.75,PRESSURE_PLATE_THICKNESS2],center=true);
+        translate([24,CONNECTOR2_Y+2,LEG_WIDTH/2-PRESSURE_PLATE_THICKNESS2/2]) color([1,0,0])#cube([50,10+PRESSURE_PLATE_LENGTH*0.75,PRESSURE_PLATE_THICKNESS2],center=true);
             
         }
         union()
         {
+            
             top_out_diff_corner();
             leg_prop();
             guard2();
             leg_stl_only();
             translate([3,0,0])                    leg_prop_front_piece();
             
-            DIFF_CUBE_X=15;
-    DIFF_CUBE_Y=55;
+            
     translate([46-DIFF_CUBE_X/2,-30-DIFF_CUBE_Y/2,0])cube([DIFF_CUBE_X,DIFF_CUBE_Y,10]);
     translate([-10-DIFF_CUBE_X/2,-30-DIFF_CUBE_Y/2,0]) rotate([0,0,-20])cube([DIFF_CUBE_X,DIFF_CUBE_Y,10]);
-            DIFF_CUBE_X2=12;
-            DIFF_CUBE_Z=10;
-    translate([12-DIFF_CUBE_X2/2,-30-DIFF_CUBE_Y/2,-DIFF_CUBE_Z/2]) rotate([0,0,-20])#cube([DIFF_CUBE_X2-2,DIFF_CUBE_Y,DIFF_CUBE_Z]);
-    translate([18-DIFF_CUBE_X2/2,-30-DIFF_CUBE_Y/2,-DIFF_CUBE_Z/2]) rotate([0,0,-13])cube([DIFF_CUBE_X2,DIFF_CUBE_Y,DIFF_CUBE_Z]);
+            
+    translate([12-DIFF_CUBE_X2/2,-30-DIFF_CUBE_Y/2,-DIFF_CUBE_Z/2]) rotate([0,0,-20])cube([DIFF_CUBE_X2-2-5,DIFF_CUBE_Y,DIFF_CUBE_Z]);
+    translate([18-DIFF_CUBE_X2/2,-30-DIFF_CUBE_Y/2,-DIFF_CUBE_Z/2]) rotate([0,0,-13])cube([DIFF_CUBE_X2-5,DIFF_CUBE_Y,DIFF_CUBE_Z]);
     translate([25-DIFF_CUBE_X2/2,-30-DIFF_CUBE_Y/2,-DIFF_CUBE_Z/2]) rotate([0,0,-0])cube([DIFF_CUBE_X2,DIFF_CUBE_Y,DIFF_CUBE_Z]);        
             
             guard3_hole();
@@ -301,9 +320,9 @@ mirror([0,0,1]) pressure_plate();
 //final artifacts
 //rotate([0,180,0]) mirror([0,0,1]) import("stls/leg_combined.stl", convexity=3);
 //propeller_guard();
-rotate([90,0,0]) propeller_guard();
+//rotate([90,0,0]) propeller_guard();
 //pressure_plate();
-//mirror([0,0,1]) pressure_plate();
+mirror([0,0,1]) pressure_plate();
 
 //guard2();
 
