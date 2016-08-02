@@ -45,7 +45,7 @@ PROP_GUARD_Y_OFFSET=-7.5;
 module top_out_diff_corner()
 {
     translate([37,-54,6])cube([12,14,35],center=true);
-    translate([37,-54,6]) rotate([0,45,0])cube([12,14,35],center=true);
+    translate([37,-54,6]) rotate([0,-45,0])cube([12,14,35],center=true);
 }
 module pressure_plate()
 {
